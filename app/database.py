@@ -1,6 +1,7 @@
 """Database engine and session utilities."""
 
 from contextlib import contextmanager
+import logging
 from time import sleep
 from typing import Any, Iterator
 
@@ -10,6 +11,7 @@ from sqlmodel import Session, SQLModel, create_engine
 from .config import get_settings
 
 
+logger = logging.getLogger(__name__)
 settings = get_settings()
 
 
@@ -43,16 +45,26 @@ engine = create_engine(
 def init_db() -> None:
     """Create database tables with retry support for managed services."""
 
-    attempts = 0
-    while True:
+    for attempt in range(1, settings.database_init_max_retries + 1):
         try:
             SQLModel.metadata.create_all(engine)
-            break
-        except OperationalError:
-            attempts += 1
-            if attempts > settings.database_init_max_retries:
+        except OperationalError as exc:  # pragma: no cover - requires unavailable DB
+            wait = settings.database_init_retry_interval * (
+                settings.database_init_backoff_factor ** (attempt - 1)
+            )
+            logger.warning(
+                "Database initialization failed (attempt %s/%s): %s",  # pragma: no cover - logging side effect
+                attempt,
+                settings.database_init_max_retries,
+                exc,
+            )
+            if attempt == settings.database_init_max_retries:
                 raise
-            sleep(settings.database_init_retry_interval)
+            sleep(wait)
+        else:
+            if attempt > 1:
+                logger.info("Database initialization succeeded after %s attempts", attempt)
+            break
 
 
 @contextmanager

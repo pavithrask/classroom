@@ -47,7 +47,7 @@ Environment variables can be set to override defaults (see `app/config.py`). Key
 
 - `DATABASE_URL` – database connection string; Postgres URLs are normalized automatically.
 - `DATABASE_SSLMODE` – set to `require` for managed Postgres providers like Fly.io to enforce TLS.
-- `DATABASE_INIT_MAX_RETRIES` / `DATABASE_INIT_RETRY_INTERVAL` – control startup retries while waiting for the database to accept connections.
+- `DATABASE_INIT_MAX_RETRIES` / `DATABASE_INIT_RETRY_INTERVAL` / `DATABASE_INIT_BACKOFF_FACTOR` – control startup retries while waiting for the database to accept connections.
 - SMTP settings (`SMTP_HOST`, `SMTP_PORT`, etc.), `TIMEZONE`, and file upload limits.
 
 ## Testing
