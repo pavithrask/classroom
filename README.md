@@ -63,3 +63,25 @@ The repository ships with a production-ready pipeline and infrastructure-as-code
 - `.github/workflows/deploy.yml` pushes every commit on `main` to Fly.io once the required secrets are configured (`FLY_API_TOKEN`, `FLY_APP_NAME`, and `VITE_API_BASE_URL`).
 
 Follow `docs/fly-deployment.md` for step-by-step instructions on provisioning Fly Postgres, seeding application secrets, and enabling the CI/CD workflow.
+
+## Pushing changes to GitHub
+To publish the current code to GitHub:
+
+1. Create an empty repository in your GitHub account (for example `primary-classes-manager`).
+2. Add that repository as the `origin` remote in this project directory:
+   ```bash
+   git remote add origin git@github.com:<your-username>/primary-classes-manager.git
+   # or use https://github.com/... if you prefer HTTPS authentication
+   ```
+3. Push the existing `work` branch (if you keep that name):
+   ```bash
+   git push -u origin work
+   ```
+   If you prefer `main`, rename the branch locally before the first push:
+   ```bash
+   git branch -m work main
+   git push -u origin main
+   ```
+4. Subsequent pushes only require `git push` because the upstream is configured by `-u`.
+
+Ensure your SSH key or HTTPS credentials are configured in your environment so GitHub accepts the push.
