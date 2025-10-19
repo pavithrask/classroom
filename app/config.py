@@ -1,7 +1,9 @@
 """Application configuration utilities."""
 
 from functools import lru_cache
-from pydantic import BaseSettings, AnyHttpUrl, validator
+
+from pydantic import AnyHttpUrl, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -21,11 +23,9 @@ class Settings(BaseSettings):
     allowed_file_types: tuple[str, ...] = ("pdf", "docx", "jpg", "jpeg", "png", "mp4")
     backup_bucket: AnyHttpUrl | None = None
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
 
-    @validator("allowed_file_types", pre=True)
+    @field_validator("allowed_file_types", mode="before")
     def _split_allowed_file_types(cls, value: str | tuple[str, ...]) -> tuple[str, ...]:
         if isinstance(value, str):
             return tuple(ext.strip() for ext in value.split(",") if ext.strip())
