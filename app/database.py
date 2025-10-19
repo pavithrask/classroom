@@ -26,11 +26,17 @@ def _build_connect_args() -> dict[str, Any]:
 
 
 connect_args = _build_connect_args()
+engine_kwargs: dict[str, Any] = {
+    "echo": False,
+    "pool_pre_ping": True,
+}
+
+if connect_args:
+    engine_kwargs["connect_args"] = connect_args
+
 engine = create_engine(
     settings.database_url,
-    echo=False,
-    pool_pre_ping=True,
-    connect_args=connect_args or None,
+    **engine_kwargs,
 )
 
 
