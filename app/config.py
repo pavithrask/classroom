@@ -30,7 +30,7 @@ class Settings(BaseSettings):
         """Ensure SQLAlchemy can load the configured database dialect."""
 
         if value.startswith("postgres://"):
-            return value.replace("postgres://", "postgresql+psycopg://", 1)
+            return value.replace("postgres://", "postgresql+psycopg2://", 1)
         return value
 
     @field_validator("allowed_file_types", mode="before")
