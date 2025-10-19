@@ -12,7 +12,7 @@ This guide walks through provisioning the infrastructure and wiring the CI/CD wo
 fly auth login
 fly launch --no-deploy --copy-config --name primary-classes-manager
 fly postgres create --name primary-classes-manager-db --initial-cluster-size 1 --vm-size shared-cpu-1x --volume-size 1
-fly postgres attach --postgres-app primary-classes-manager-db primary-classes-manager
+fly postgres attach --app primary-classes-manager primary-classes-manager-db
 ```
 The attach command creates the `DATABASE_URL` secret on the application so the API connects to the managed Postgres cluster.
 
