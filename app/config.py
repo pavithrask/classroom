@@ -25,6 +25,14 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
 
+    @field_validator("database_url", mode="before")
+    def _normalize_database_url(cls, value: str) -> str:
+        """Ensure SQLAlchemy can load the configured database dialect."""
+
+        if value.startswith("postgres://"):
+            return value.replace("postgres://", "postgresql+psycopg://", 1)
+        return value
+
     @field_validator("allowed_file_types", mode="before")
     def _split_allowed_file_types(cls, value: str | tuple[str, ...]) -> tuple[str, ...]:
         if isinstance(value, str):
