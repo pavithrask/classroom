@@ -43,7 +43,12 @@ This repository contains a FastAPI backend **and** a React front-end that implem
 The web client provides authenticated dashboards for daily operations, CRUD views for classes and students (including CSV import), inline attendance capture, assignment gradebook management, and birthday template automation. The application shares the same seeded credentials as the API.
 
 ## Configuration
-Environment variables can be set to override defaults (see `app/config.py`). Key options include `DATABASE_URL`, SMTP settings, `TIMEZONE`, and file upload limits.
+Environment variables can be set to override defaults (see `app/config.py`). Key options include:
+
+- `DATABASE_URL` – database connection string; Postgres URLs are normalized automatically.
+- `DATABASE_SSLMODE` – set to `require` for managed Postgres providers like Fly.io to enforce TLS.
+- `DATABASE_INIT_MAX_RETRIES` / `DATABASE_INIT_RETRY_INTERVAL` – control startup retries while waiting for the database to accept connections.
+- SMTP settings (`SMTP_HOST`, `SMTP_PORT`, etc.), `TIMEZONE`, and file upload limits.
 
 ## Testing
 Run the Python bytecode compilation check to validate syntax:

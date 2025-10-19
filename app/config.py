@@ -11,6 +11,9 @@ class Settings(BaseSettings):
 
     app_name: str = "Primary Classes Manager"
     database_url: str = "sqlite:///./data.db"
+    database_sslmode: str | None = None
+    database_init_max_retries: int = 5
+    database_init_retry_interval: float = 2.0
     secret_key: str = "change-me"
     access_token_expire_minutes: int = 60 * 24
     smtp_host: str = "localhost"
